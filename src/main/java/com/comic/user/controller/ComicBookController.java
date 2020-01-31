@@ -26,9 +26,15 @@ import com.comic.user.repository.UserRepository;
 @RequestMapping("api/comic")
 public class ComicBookController {
 	
+	/*
+	 *  User Repository
+	 */
 	@Autowired
 	private UserRepository userRepository;
 
+	/*
+	 *  Comic Book Repository
+	 */
 	@Autowired
 	private ComicBookRepository comicBookRepository;
 
