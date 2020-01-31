@@ -89,5 +89,15 @@ public class UserController {
 	            return this.userRepository.save(user).getComicBook(); 
 	        }).orElseThrow(() -> new ResourceNotFoundException("User", id));
 	    }
+	 
+	 
+	 
+	 //finding User by a particular comic genre.
+	 @GetMapping("/genre/{genre}")
+	 public List<User> getUsersByComicBooksGenre(@PathVariable("genre") String genre){
+		 
+		return userRepository.findByComicBooksGenre(genre);
+		 
+	 }
 
 }
