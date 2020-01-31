@@ -2,27 +2,32 @@ package com.comic.user.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "user", catalog = "comicuser")
+@Table(name="user")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="UserId")
-	private long userId;
+	private int id;
 
 	@NotNull
 	@Column(name="name")
@@ -36,19 +41,35 @@ public class User {
 	@Column(name="sex")
 	private String sex;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<ComicUser> comicUsers = new HashSet<ComicUser>();
-	
-	
+
+	@ManyToMany(fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE
+	})
+	@JoinTable(name = "comic_user",
+	joinColumns = { @JoinColumn(name = "user_id") },
+	inverseJoinColumns = { @JoinColumn(name = "comic_id") })
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Set<ComicBook> comicBooks = new HashSet<>();
 
 	public User() {
 	}
 
-public User(@NotNull String name, @NotNull int age, @NotNull String sex) {
+	public User(@NotNull String name, @NotNull int age, @NotNull String sex) {
 		this.name = name;
 		this.age = age;
 		this.sex = sex;
-		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -74,12 +95,13 @@ public User(@NotNull String name, @NotNull int age, @NotNull String sex) {
 		this.sex = sex;
 	}
 
-	public Set<ComicUser> getComicUsers() {
-		return comicUsers;
+	
+	public Set<ComicBook> getComicBook() {
+		return comicBooks;
 	}
 
-	public void setComicUsers(Set<ComicUser> comicUsers) {
-		this.comicUsers = comicUsers;
-	}
+	public void setComicBook(Set<ComicBook> comicBooks) {
+		this.comicBooks = comicBooks;
+	}	
 	
 }

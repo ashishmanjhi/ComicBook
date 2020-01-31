@@ -8,10 +8,10 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.spring</groupId>
-	<artifactId>ComicUser</artifactId>
+	<groupId>com</groupId>
+	<artifactId>Comicbook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ComicUser</name>
+	<name>Comicbook</name>
 	<description>spring</description>
 
 	<properties>
@@ -32,11 +32,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

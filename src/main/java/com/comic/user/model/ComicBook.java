@@ -1,30 +1,30 @@
 package com.comic.user.model;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "comicbook", catalog = "comicuser")
+@Table(name="comicbook")
 public class ComicBook {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ComicId")
-	private long comicId;
+	private int id;
 
 	@NotNull
 	@Column(name="title")
@@ -42,20 +42,33 @@ public class ComicBook {
 	@Column(name="genre")
 	private String genre;
 
-	@OneToMany(mappedBy = "comicbook", cascade = CascadeType.ALL)
-	private Set<ComicUser> comicUsers;
+	@ManyToMany(fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE
+	},
+			mappedBy = "comicBooks")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Set<User> users = new HashSet<>();
 
-	
 	public ComicBook() {
+
 	}
-	
-	public ComicBook(String title, String writer, String publisher, String genre, ComicUser... comicUsers) {
+
+	public ComicBook(@NotNull String title, @NotNull String writer, @NotNull String publisher, @NotNull String genre) {
 		this.title = title;
-		this.writer=writer;
-		this.publisher=publisher;
-		this.genre=genre;
-		for(ComicUser comicUser : comicUsers) comicUser.setComicbook(this);
-		this.comicUsers = Stream.of(comicUsers).collect(Collectors.toSet());
+		this.writer = writer;
+		this.publisher = publisher;
+		this.genre = genre;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -90,12 +103,13 @@ public class ComicBook {
 		this.genre = genre;
 	}
 
-	public Set<ComicUser> getComicUsers() {
-		return comicUsers;
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public void setComicUsers(Set<ComicUser> comicUsers) {
-		this.comicUsers = comicUsers;
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
+
 
 }
