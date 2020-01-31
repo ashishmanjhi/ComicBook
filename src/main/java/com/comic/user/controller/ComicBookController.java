@@ -25,7 +25,7 @@ import com.comic.user.repository.UserRepository;
 @RestController
 @RequestMapping("api/comic")
 public class ComicBookController {
-	
+
 	/*
 	 *  User Repository
 	 */
@@ -39,50 +39,88 @@ public class ComicBookController {
 	private ComicBookRepository comicBookRepository;
 
 
+	/**
+	 * PostMapping creates a new Comic book in the database.
+	 * 
+	 * @param comicBook details
+	 * @return comiBook
+	 */
 	@PostMapping() 
-    public ComicBook createComicBook(@Valid @RequestBody ComicBook comicBook){        
-        return this.comicBookRepository.save(comicBook);
-    }
-	
-	 @GetMapping("/{id}") 
-	 public ComicBook getComicBook(@PathVariable int id){
-	        // If the record exists by id return it, otherwise throw an exception
-	        return this.comicBookRepository.findById(id).orElseThrow(() -> 
-	                new ResourceNotFoundException("ComicBook", id)
-	        );
-	    }
-	 
-	 @GetMapping() 
-	    public List<ComicBook> getComicBooks(){
-	        return this.comicBookRepository.findAll();
-	    }
-	 
-	 @PutMapping() 
-	    public ComicBook updateComicBook(@Valid @RequestBody ComicBook comicBook){
-	        // Finds comicBook by id, maps it's content, updates new values and save. Throws an exception if not found.
-	        return this.comicBookRepository.findById(comicBook.getId()).map((toUpdate) -> {
-	            toUpdate.setTitle(comicBook.getTitle());
-	            toUpdate.setWriter(comicBook.getWriter());
-	            toUpdate.setPublisher(comicBook.getPublisher());
-	            toUpdate.setGenre(comicBook.getGenre());
-	            return this.comicBookRepository.save(toUpdate);
-	        }).orElseThrow(() -> new ResourceNotFoundException("ComicBook", comicBook.getId()));
-	    }
-	    
-	    @DeleteMapping("/{id}") 
-	    public ResponseEntity<?> deleteComicBook(@PathVariable int id){
-	        // If id exists, delete the record and return a response message, otherwise throws exception
-	        return this.comicBookRepository.findById(id).map((toDelete) -> {
-	            this.comicBookRepository.delete(toDelete);
-	            return ResponseEntity.ok("ComicBook id " + id + " deleted");
-	        }).orElseThrow(() -> new ResourceNotFoundException("ComicBook", id));
-	    }
-	    
-	    @GetMapping("/{id}/users")
-	    public Set<User> getLecturers(@PathVariable int id){
-	        // Finds comic by id and returns it's recorded users, otherwise throws exception
-	        return this.comicBookRepository.findById(id).map((comicBook) -> {
-	            return comicBook.getUsers();
-	        }).orElseThrow(() -> new ResourceNotFoundException("ComicBook", id));
-	    }
+	public ComicBook createComicBook(@Valid @RequestBody ComicBook comicBook){        
+		return this.comicBookRepository.save(comicBook);
+	}
+
+	/**
+	 *GetMapping provides detail of an comic book with a particular id in the
+	 * database. 
+	 * 
+	 * @param Comic Book id
+	 * @return Comic book
+	 */
+	@GetMapping("/{id}") 
+	public ComicBook getComicBook(@PathVariable int id){
+		// If the record exists by id return it, otherwise throw an exception
+		return this.comicBookRepository.findById(id).orElseThrow(() -> 
+		new ResourceNotFoundException("ComicBook", id)
+				);
+	}
+
+	/**GetMapping provides detail of all the comic books  in the
+	 * database.
+	 * 
+	 * @return List of Comic book
+	 */
+	@GetMapping() 
+	public List<ComicBook> getComicBooks(){
+		return this.comicBookRepository.findAll();
+	}
+
+	/**
+	 * PutMapping updates the details of a comic book with a particular id in
+	 * the database.
+	 * 
+	 * @param comicBook details
+	 * @return updated comicBook
+	 */
+	@PutMapping("/{id}")
+	public ComicBook updateComicBook(@PathVariable(value = "id") Integer id,@Valid @RequestBody ComicBook comicBook){
+		// Finds comicBook by id, maps it's content, updates new values and save. Throws an exception if not found.
+		return this.comicBookRepository.findById(id).map((toUpdate) -> {
+			toUpdate.setTitle(comicBook.getTitle());
+			toUpdate.setWriter(comicBook.getWriter());
+			toUpdate.setPublisher(comicBook.getPublisher());
+			toUpdate.setGenre(comicBook.getGenre());
+			return this.comicBookRepository.save(toUpdate);
+		}).orElseThrow(() -> new ResourceNotFoundException("ComicBook", comicBook.getId()));
+	}
+
+	/**
+	 * DeleteMapping deletes a comic book with a particular id in the
+	 * database.
+	 * 
+	 * @param Comic book id
+	 * @return updated list of comic book
+	 */
+	@DeleteMapping("/{id}") 
+	public ResponseEntity<?> deleteComicBook(@PathVariable int id){
+		// If id exists, delete the record and return a response message, otherwise throws exception
+		return this.comicBookRepository.findById(id).map((toDelete) -> {
+			this.comicBookRepository.delete(toDelete);
+			return ResponseEntity.ok("ComicBook id " + id + " deleted");
+		}).orElseThrow(() -> new ResourceNotFoundException("ComicBook", id));
+	}
+
+	/**
+	 * GetMapping finds Users who all have a comic book of particular id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/{id}/users")
+	public Set<User> getUsers(@PathVariable int id){
+		// Finds comic by id and returns it's recorded users, otherwise throws exception
+		return this.comicBookRepository.findById(id).map((comicBook) -> {
+			return comicBook.getUsers();
+		}).orElseThrow(() -> new ResourceNotFoundException("ComicBook", id));
+	}
 }

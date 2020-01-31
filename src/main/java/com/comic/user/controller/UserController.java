@@ -44,7 +44,7 @@ public class UserController {
 	@Autowired
 	private ComicBookRepository comicBookRepository;
 
-	
+
 	/**
 	 * PostMapping creates a new User in the database.
 	 * 
@@ -59,13 +59,13 @@ public class UserController {
 	/**
 	 * GetMapping  provides the list of all the users in the database.
 	 * 
-	 * @return User details
+	 * @return List of User details
 	 */
 	@GetMapping()
 	public List<User> getAllUsers(){
 		return userRepository.findAll();
 	}
-	
+
 	/**
 	 * GetMapping provides detail of an user with a particular id in the
 	 * database.
@@ -84,8 +84,8 @@ public class UserController {
 	 * PutMapping updates the details of an user with a particular id in
 	 * the database.
 	 * 
-	 * @param user
-	 * @return
+	 * @param user details
+	 * @return updated user
 	 */
 	@PutMapping("/{id}")
 	public User updateUser(@PathVariable(value = "id") Integer id,@Valid @RequestBody User user) {
@@ -149,7 +149,7 @@ public class UserController {
 
 
 
-	
+
 	/**
 	 * GetMapping finds all the user who read a particular genre of comic book.
 	 * 
