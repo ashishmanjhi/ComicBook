@@ -32,6 +32,11 @@ public class ResourceNotFoundException extends RuntimeException{
         super(entity + " id " + id + " not found");
     }
     
+    /**
+     * Parameterized Constructor
+     * @param User
+     * @param comic book genre 
+     */
     public ResourceNotFoundException(String entity, String genre) {
         super(entity + " with genre " + genre + " not found");
     }

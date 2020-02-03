@@ -89,8 +89,8 @@ public class UserController {
 	 * @return updated user
 	 */
 	@PutMapping("/{id}")
-	public User updateUser(@PathVariable(value = "id") Integer id,@Valid @RequestBody User user) {
-
+	public User updateUserById(@PathVariable(value = "id") Integer id,@Valid @RequestBody User user) {
+		// Finds user by id, maps it's content, updates new values and save. Throws an exception if not found.
 		return  this.userRepository.findById(id).map(toUpdate -> {
 			toUpdate.setName(user.getName());
 			toUpdate.setAge(user.getAge());
@@ -107,7 +107,7 @@ public class UserController {
 	 * @return Updated List of User.
 	 */
 	@DeleteMapping("/{id}") 
-	public ResponseEntity<?> deleteUser(@PathVariable int id){
+	public ResponseEntity<?> deleteUserById(@PathVariable int id){
 
 		return this.userRepository.findById(id).map((toDelete) -> {
 			this.userRepository.delete(toDelete);
@@ -121,7 +121,7 @@ public class UserController {
 	 * @return User
 	 */
 	@GetMapping("/{userId}/comicbooks")
-	public Set<ComicBook> getComicBooks(@PathVariable int userId){
+	public Set<ComicBook> getComicBooksByUserId(@PathVariable int userId){
 		// Finds User by id and returns it's recorded comicbooks, otherwise throws exception 
 		return this.userRepository.findById(userId).map((user) -> {
 			return user.getComicBook();
@@ -134,18 +134,18 @@ public class UserController {
 	 * @param comicBookId
 	 * @return User
 	 */
-	@PostMapping("/{id}/comicbooks/{comicBookId}")
-	public Set<ComicBook> addComicBook(@PathVariable int id, @PathVariable int comicBookId){
+	@PostMapping("/{userId}/comicbook/{comicBookId}")
+	public Set<ComicBook> addComicBookToUser(@PathVariable int userId, @PathVariable int comicBookId){
 		// Finds a persisted comic
 		ComicBook comicBook = this.comicBookRepository.findById(comicBookId).orElseThrow(
 				() -> new ResourceNotFoundException("ComicBook", comicBookId)
 				);
 
 		// Finds a user and adds the given comic to the User's set.
-		return this.userRepository.findById(id).map((user) -> {
+		return this.userRepository.findById(userId).map((user) -> {
 			user.getComicBook().add(comicBook);
 			return this.userRepository.save(user).getComicBook(); 
-		}).orElseThrow(() -> new ResourceNotFoundException("User", id));
+		}).orElseThrow(() -> new ResourceNotFoundException("User", userId));
 	}
 
 

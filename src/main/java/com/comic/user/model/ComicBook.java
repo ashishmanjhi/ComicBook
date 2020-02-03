@@ -178,5 +178,4 @@ public class ComicBook {
 		this.users = users;
 	}
 
-
 }

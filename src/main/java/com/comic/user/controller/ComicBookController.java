@@ -43,7 +43,7 @@ public class ComicBookController {
 	 * PostMapping creates a new Comic book in the database.
 	 * 
 	 * @param comicBook details
-	 * @return comiBook
+	 * @return comicBook
 	 */
 	@PostMapping() 
 	public ResponseEntity<ComicBook> createComicBook(@Valid @RequestBody ComicBook comicBook){        
@@ -58,7 +58,7 @@ public class ComicBookController {
 	 * @return Comic book
 	 */
 	@GetMapping("/{id}") 
-	public ComicBook getComicBook(@PathVariable int id){
+	public ComicBook getComicBookById(@PathVariable int id){
 		// If the record exists by id return it, otherwise throw an exception
 		return this.comicBookRepository.findById(id).orElseThrow(() -> 
 		new ResourceNotFoundException("ComicBook", id)
@@ -83,7 +83,7 @@ public class ComicBookController {
 	 * @return updated comicBook
 	 */
 	@PutMapping("/{id}")
-	public ComicBook updateComicBook(@PathVariable(value = "id") Integer id,@Valid @RequestBody ComicBook comicBook){
+	public ComicBook updateComicBookById(@PathVariable(value = "id") Integer id,@Valid @RequestBody ComicBook comicBook){
 		// Finds comicBook by id, maps it's content, updates new values and save. Throws an exception if not found.
 		return this.comicBookRepository.findById(id).map((toUpdate) -> {
 			toUpdate.setTitle(comicBook.getTitle());
@@ -102,7 +102,7 @@ public class ComicBookController {
 	 * @return updated list of comic book
 	 */
 	@DeleteMapping("/{id}") 
-	public ResponseEntity<?> deleteComicBook(@PathVariable int id){
+	public ResponseEntity<?> deleteComicBookById(@PathVariable int id){
 		// If id exists, delete the record and return a response message, otherwise throws exception
 		return this.comicBookRepository.findById(id).map((toDelete) -> {
 			this.comicBookRepository.delete(toDelete);
@@ -117,7 +117,7 @@ public class ComicBookController {
 	 * @return
 	 */
 	@GetMapping("/{id}/users")
-	public Set<User> getUsers(@PathVariable int id){
+	public Set<User> getUsersByComicBookId(@PathVariable int id){
 		// Finds comic by id and returns it's recorded users, otherwise throws exception
 		return this.comicBookRepository.findById(id).map((comicBook) -> {
 			return comicBook.getUsers();

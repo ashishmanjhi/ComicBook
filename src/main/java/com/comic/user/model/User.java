@@ -51,6 +51,7 @@ public class User {
 	private String sex;
 
 
+	// Join table Comic_User contain the relation between user and comic book.
 	@ManyToMany(fetch = FetchType.LAZY,
 			cascade = {
 					CascadeType.PERSIST,
@@ -61,7 +62,7 @@ public class User {
 	inverseJoinColumns = { @JoinColumn(name = "comic_id") })
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private Set<ComicBook> comicBooks = new HashSet<>();
+	private Set<ComicBook> comicBooks = new HashSet<>();// Collection for Comic Book library of a User.
 
 	// ----------------
     // - CONSTRUCTORS -
