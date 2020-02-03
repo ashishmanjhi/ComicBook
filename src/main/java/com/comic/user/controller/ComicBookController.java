@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +21,16 @@ import com.comic.user.exception.ResourceNotFoundException;
 import com.comic.user.model.ComicBook;
 import com.comic.user.model.User;
 import com.comic.user.repository.ComicBookRepository;
-import com.comic.user.repository.UserRepository;
 
+/**
+ * @author Ashish
+ * 
+ * This {@link ComicBookController} class is used to get Comic book details.
+ *
+ */
 @RestController
 @RequestMapping("api/comic")
 public class ComicBookController {
-
-	/*
-	 *  User Repository
-	 */
-	@Autowired
-	private UserRepository userRepository;
 
 	/*
 	 *  Comic Book Repository
@@ -46,8 +46,8 @@ public class ComicBookController {
 	 * @return comiBook
 	 */
 	@PostMapping() 
-	public ComicBook createComicBook(@Valid @RequestBody ComicBook comicBook){        
-		return this.comicBookRepository.save(comicBook);
+	public ResponseEntity<ComicBook> createComicBook(@Valid @RequestBody ComicBook comicBook){        
+		return new ResponseEntity<ComicBook>(comicBookRepository.save(comicBook),HttpStatus.CREATED);
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class ComicBookController {
 	 * @return List of Comic book
 	 */
 	@GetMapping() 
-	public List<ComicBook> getComicBooks(){
-		return this.comicBookRepository.findAll();
+	public ResponseEntity<List<ComicBook>> getComicBooks(){
+		return new ResponseEntity<List<ComicBook>>(comicBookRepository.findAll(),HttpStatus.OK);
 	}
 
 	/**

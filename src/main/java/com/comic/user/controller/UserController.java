@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +53,8 @@ public class UserController {
 	 * @return User
 	 */
 	@PostMapping()
-	public User createUser(@Valid @RequestBody User user) {
-		return userRepository.save(user);
+	public  ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+		return new  ResponseEntity<User>(userRepository.save(user),HttpStatus.CREATED);
 	}
 
 	/**
@@ -62,8 +63,8 @@ public class UserController {
 	 * @return List of User details
 	 */
 	@GetMapping()
-	public List<User> getAllUsers(){
-		return userRepository.findAll();
+	public ResponseEntity<List<User>> getAllUsers(){
+		return new ResponseEntity<List<User>>(userRepository.findAll(),HttpStatus.OK);
 	}
 
 	/**
@@ -148,8 +149,6 @@ public class UserController {
 	}
 
 
-
-
 	/**
 	 * GetMapping finds all the user who read a particular genre of comic book.
 	 * 
@@ -157,8 +156,13 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("/genre/{genre}")
-	public List<User> getUsersByComicBooksGenre(@PathVariable("genre") String genre){
-		return userRepository.findByComicBooksGenre(genre);
-	}
+	public  ResponseEntity<List<User>> getUsersByComicBooksGenre(@PathVariable("genre") String genre){
+		
+		 List<User> user = userRepository.findByComicBooksGenre(genre);
+		 if(user.isEmpty())
+			 throw new ResourceNotFoundException("User", genre);
+		 else
+		return new ResponseEntity<List<User>>(user,HttpStatus.OK);
+		}
 
 }
