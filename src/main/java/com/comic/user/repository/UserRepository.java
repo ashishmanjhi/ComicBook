@@ -22,5 +22,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	 */
 	List<User> findByComicBooksGenre(String genre);
 
+	/*
+	 * Finds all the Users who read a particular genre of comic books and of a selected age.
+	 */
+	List<User> findByComicBooksGenreAndAge(String genre, int age);
+
 
 }

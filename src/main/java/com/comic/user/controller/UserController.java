@@ -164,5 +164,16 @@ public class UserController {
 		 else
 		return new ResponseEntity<List<User>>(user,HttpStatus.OK);
 		}
+	
+	@GetMapping("/genre/{genre}/user/{age}")
+	public  ResponseEntity<List<User>> getUsersByComicBooksGenreAndUserAge(@PathVariable("genre") String genre,@PathVariable("age") int age)
+	{
+		
+		 List<User> user = userRepository.findByComicBooksGenreAndAge(genre,age);
+		 if(user.isEmpty())
+			 throw new ResourceNotFoundException("User", genre,age);
+		 else
+		return new ResponseEntity<List<User>>(user,HttpStatus.OK);
+		}
 
 }
