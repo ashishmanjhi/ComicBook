@@ -165,6 +165,13 @@ public class UserController {
 		return new ResponseEntity<List<User>>(user,HttpStatus.OK);
 		}
 	
+	/**
+	 * GetMapping finds all the user who read a particular genre of comic book and selected age.
+	 * 
+	 * @param genre
+	 * @param age
+	 * @return
+	 */
 	@GetMapping("/genre/{genre}/user/{age}")
 	public  ResponseEntity<List<User>> getUsersByComicBooksGenreAndUserAge(@PathVariable("genre") String genre,@PathVariable("age") int age)
 	{

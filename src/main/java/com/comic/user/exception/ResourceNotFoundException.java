@@ -42,6 +42,7 @@ public class ResourceNotFoundException extends RuntimeException{
     }
     
     /**
+     * Parameterized Constructor
      * @param entity User
      * @param comic book genre 
      * @param user age
